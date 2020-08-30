@@ -1,0 +1,1 @@
+print('hello.py __name__:', __name__)
