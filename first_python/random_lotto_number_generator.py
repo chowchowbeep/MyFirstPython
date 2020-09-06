@@ -10,7 +10,7 @@ def get_lotto_numbers():
         if number in lotto_numbers: # 반환받은 숫자가 이미 리스트에 저장된 숫자라면 그냥 지나감
         # if ~ in ~ : 요소가 있는지 검사
             continue
-        else: # 반환받은 숫자가 리스트에 저장돼지 않은 숫자라면 리스트에 저장
+        else: # 반환받은 숫자가 리스트에 저장되지 않은 숫자라면 리스트에 저장
             lotto_numbers.append(number)
     return sorted(lotto_numbers) # 저장된 난수리스트를 오름차순으로 정렬하여 반환
 
