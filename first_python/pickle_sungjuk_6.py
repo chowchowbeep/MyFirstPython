@@ -1,13 +1,15 @@
+import pickle
+
 class Sungjuk:
     def __init__(self):
-        self._hakbun = None
-        self._irum = None
+        self._hakbun = ""
+        self._irum = ""
         self._kor = 0
         self._eng = 0
         self._math = 0
         self._tot = 0
         self._avg = 0.0
-        self._grade = None
+        self._grade = ""
         
     def get_hakbun(self):
         return self._hakbun
@@ -75,9 +77,8 @@ class Sungjuk:
     
     def input_sungjuk(self):
         self._hakbun = input("학번을 입력하세요 : ")
-        # for data in students:
-        #     if data.hakbun == self._hakbun:
-        #         return True
+        if (obj.hakbun == "exit"):
+            return True
         self._irum = input("이름을 입력하세요 : ")
         self._kor = int(input("국어점수를 입력하세요 : "))
         self._eng = int(input("영어점수를 입력하세요 : "))
@@ -104,14 +105,42 @@ class Sungjuk:
                self._tot, self._avg, self._grade))
         
 if __name__ == "__main__":
-    obj = Sungjuk()
-    obj.input_sungjuk()
-    
-    obj.process_sungjuk()
-    
-    print("\n                    *** 성적표 ***")
-    print("========================================================")
-    print("학번     이름     국어     영어     수학     총점     평균      등급")
-    print("========================================================")
-    obj.output_sungjuk()
-    print("========================================================")
+
+    lst = []
+    fp = open("sungjuk_pickle.dat", "wb") # 바이너리 쓰기 할 파일 열기
+    # 리스트에 성적객체 저장
+    while True:
+        obj = Sungjuk()
+        if obj.input_sungjuk():
+            break
+        obj.process_sungjuk()
+        lst.append(obj)
+        print()
+    # 성적객체를 리스트에서 하나씩 꺼내서 pickle의 dump메소드를 이용해 파일로 출력
+    for obj in lst:
+        # obj.output_sungjuk()
+        pickle.dump(obj, fp)
+    fp.close()
+
+
+
+    # pickle의 load메소드를 이용해 파일내에 직렬화되어 저장된 성적객체들을 역직렬화 하여 꺼내 리스트에 저장
+    lstForOutput = []
+    fp2 = open("sungjuk_pickle.dat", "rb")
+    try:
+        while True:
+            obj = pickle.load(fp2)
+            lstForOutput.append(obj)
+    except:
+        # print("더 이상 출력할 데이터 없음!")
+        pass
+    finally:
+        print("\n*** 성적표 ***")
+        print("===============================================================")
+        print("학번     이름     국어     영어     수학     총점     평균      등급")
+        print("===============================================================")
+        # 역직렬화되어 리스트에 저장된 객체를 출력
+        for obj in lstForOutput:
+            obj.output_sungjuk()
+        print("===============================================================")
+        fp2.close()
